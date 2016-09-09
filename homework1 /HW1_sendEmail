@@ -1,0 +1,55 @@
+#This email script takes user input for the To: and Subject: of the email.
+#It also has the user pick some random numbers that are calculated and filled into the 
+#body of the email message
+#Finally, one of the numbers selected picks a random cat image to attach to the email for send
+
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+
+#adding import for picture sending
+from email.mime.image import MIMEImage
+
+#separate file for storing my password. You can create your own extra py files
+#and import them using same method as importing libraries/modules as above
+#Can also use Base 64 encoding, but not sure when this is useful b/c still see password
+import config
+
+#some variables for use in script, In Python 2, raw_input() returns a string, 
+#and input() tries to run the input as a Python expression. My version is 2.7
+#This is discontinued in Python 3
+
+sendTo = raw_input("Who do you want to send this to?")
+subject = raw_input("What is your subject?")
+fromaddr = config.email
+
+yourName = raw_input("What is your name?")
+pickNumber1 = raw_input("Pick a number between 1 and 10")
+pickNumber2 = raw_input("Pick a number between 20 and 30")
+resultNumber = str(pickNumber1) + str(pickNumber2)
+
+imageArray = [1, 2, 3, 4, 5]
+number = int(input("pick a number between 1 and 5") - 1)
+# toaddr = "d.rose.martens@gmail.com"
+ 
+# Now Let's Build the Email message!	
+msg = MIMEMultipart()
+msg['Subject'] = subject
+msg['From'] = fromaddr
+msg['To'] = sendTo
+body = "Hello " + yourName + ":" + "\nI give exactly " + pickNumber1 + " fucks about your day. Maybe you should try doing " + pickNumber2 + " pushups to compensate."
+
+# Attach the body to the email
+msg.attach(MIMEText(body, 'plain'))
+
+#Attach image with filename Cat + users picked number + png from same folder as this script
+msg.attach(MIMEImage(file("cat" + str(imageArray[number]) + ".png").read()))
+
+#Let's Send the Email Now! 
+server = smtplib.SMTP('smtp.gmail.com', 587)
+# server.ehlo()
+server.starttls()
+server.login(fromaddr, config.password)
+text = msg.as_string()
+server.sendmail(fromaddr, sendTo, text)
+server.quit()
