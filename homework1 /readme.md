@@ -11,6 +11,11 @@ Cat Story Generator then takes the inputted info and creates a short story based
 
 If the user inputs a number not between 1 and 5 or anything else, a random Cat story is generated for them.
 
+<<<<<<< HEAD
+=======
+Please note this will not work out of the box. I created a separate config file to hold a username and password, and purposely ****** them out for this. If you want this to work, go to config.py and change the email and password to one that is yours.
+
+>>>>>>> b425802f09f1cd05edbef08ffc8787671fe76863
 Cat Images from:
 - Luna Crying - http://pin.anime.com/wp-content/uploads/2015/07/Luna-cat-is-sad-sailor-moon-animated-gif.gif
 - Cat Kneading Bag - http://s9.favim.com/orig/131210/x27-anime-cat-chi-Favim.com-1133148.gif
@@ -20,4 +25,8 @@ Cat Images from:
 
 
 Email Check:
+<<<<<<< HEAD
+=======
+- Almost done! Will add this soon in both Python and Node.js versions
+>>>>>>> b425802f09f1cd05edbef08ffc8787671fe76863
 
