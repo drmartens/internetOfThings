@@ -78,7 +78,7 @@ else:
 	bodyMessage ="Sorry, your story couldn't be loaded. :("
  
 # Now Let's Build the Email message!	
-fromaddr = "d.rose.martens@gmail.com"
+fromaddr = config.email
 msg = MIMEMultipart()
 msg['Subject'] = subject
 msg['From'] = fromaddr
