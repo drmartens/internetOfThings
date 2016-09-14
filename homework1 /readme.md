@@ -2,7 +2,7 @@ Email Send:
 ===========
 For our homework first week, we were tasked to modify our in-class email send script to take user input and have it run calculations within our program and include in the body of the email.
 
-![alt tag](http://https://media.giphy.com/media/48Eiley8Ox1GU/giphy.gif/to/img.png)
+![Alt text](https://media.giphy.com/media/48Eiley8Ox1GU/giphy.gif "Ouch Cat!")
 
 I created a Cat Story Generator that takes user input for:
 - Email You Want to Send To
