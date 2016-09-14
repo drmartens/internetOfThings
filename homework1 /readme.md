@@ -1,4 +1,5 @@
-Email Send:
+Email Check:
+===========
 For our homework first week, we were tasked to modify our in-class email send script to take user input and have it run calculations within our program and include in the body of the email.
 
 I created a Cat Story Generator that takes user input for:
@@ -11,7 +12,6 @@ Cat Story Generator then takes the inputted info and creates a short story based
 
 If the user inputs a number not between 1 and 5 or anything else, a random Cat story is generated for them.
 
-=======
 Please note this will not work out of the box. I created a separate config file to hold a username and password, and purposely ****** them out for this. If you want this to work, go to config.py and change the email and password to one that is yours.
 
 I used the SMTP library refernce at https://docs.python.org/2/library/email-examples.html#email-examples to help figure out the images
