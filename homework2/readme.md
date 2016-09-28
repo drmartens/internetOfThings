@@ -6,4 +6,4 @@ In short, the way this project works is that an individual triggers the PIR moti
 
 It uses a Raspberry Pi 3, PIR Motion Detector, Raspberry Pi Camera Module and Green LED. I coded the project using Python and installed libraries as needed to work with the components.
 
-Read more about this project on (https://danamartensmfadt.wordpress.com/2016/09/28/iot-project-a-public-information-box/ "my blog")
+Read more about this project on [my blog](https://danamartensmfadt.wordpress.com/2016/09/28/iot-project-a-public-information-box/). 
