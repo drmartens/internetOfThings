@@ -1,5 +1,7 @@
 # "Public Information"
 
+![alt tag](https://danamartensmfadt.files.wordpress.com/2016/09/imag9576.jpg?w=1262)
+
 My project, Public "Information", purposely plays on the idea of ambiguous emergency and "information" interfaces embedded around our city. I seek to provoke users to question who is really getting information from them.
 
 In short, the way this project works is that an individual triggers the PIR motion sensor by passing anywhere from 5 to 10 feet in front of it (also lighting the LED up). Hopefully, they will get much closer to push the Information Button!!! It then records a ten-second video using the camera module and saves the video to the Raspberry Pi's harddrive. Finally, it snaps a photo and uses a custom email script I wrote to send me a photograph of whom ever is in front of it after the recording is over.
