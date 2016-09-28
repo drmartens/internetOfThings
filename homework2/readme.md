@@ -1,4 +1,4 @@
-h1 "Public Information"
+# "Public Information"
 
 My project, Public "Information", purposely plays on the idea of ambiguous emergency and "information" interfaces embedded around our city. I seek to provoke users to question who is really getting information from them.
 
