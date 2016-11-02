@@ -28,3 +28,6 @@ I want to understand how we might use technology like RFID and NFC to create mor
 
 I believe that the Internet of Things has the potential to create unique mixed digital and physical interfaces that bring people together through technology instead of encouraging us to live in our own personal digital worlds (reflected in a 3x5 piece of glass).
 
+You can read more about the project on my [blog](https://danamartensmfadt.wordpress.com/2016/11/01/amequest-the-adventure-begins/).
+
+This project was created for the Internet of Things course for my Master of Fine Art's in Design + Technology at Parsons School of Design in October 2016.
