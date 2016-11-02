@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<link rel=stylesheet type="text/css" href="style.css">
+
+
+</head>
+<body>
+<div class="title">
+    <span>Am</span>
+    <span>E</span>
+    <span>quest</span>
+      </div>
+<div id ="explanation">
+  <p>Welcome to AmEquest, an interactive adventure game for public spaces.
+  To win the game, find all 4 gems and log them into the website using the pedestal. The first clue is written at the bottom of this page. Each time a gem is logged in, a new clue will appear.</p>
+</div>
+<section id = "rfids">
+<div id ="rfid1"><img src="gem.png" id = "img1"/></div>
+<div id ="rfid2"><img src="gem.png" id = "img2"/></div>
+<div id ="rfid3"><img src="gem.png" id = 'img3'/></div>
+<div id ="rfid4"><img src="gem.png" id = 'img4'/></div>
+<!-- <div id = "success"></div>
+ --></section>
+<section id = "buttons">
+  <button id ="button">Unlock</button>
+</section>
+<section id = "clues">
+  <div id = "clue"></div>
+</section>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+ <script type = "text/javascript">
+
+//Stuff to handle the data
+var rfidDiv1 = document.getElementById("rfid1");
+var rfidDiv2 = document.getElementById("rfid2");
+var rfidDiv3 = document.getElementById("rfid3");
+var rfidDiv4 = document.getElementById("rfid4");
+var img1 = document.getElementById('img1');
+var img2 = document.getElementById('img2');
+var img3 = document.getElementById('img3');
+var img4 = document.getElementById('img4');
+var clue = document.getElementById('clue');
+
+var button = document.getElementById("button");
+button.style.visibility = "hidden";
+var rfid1True = false;
+var rfid2True = false;
+var rfid3True = false;
+var rfid4True = false;
+var successTrue = false;
+var success = document.getElementById("success");
+var results = [];
+var sortedResults = [];
+
+//the socket
+var socket = io.connect('http://192.168.1.23:8080');
+
+//Event Listeners for the Socket
+
+ socket.on('open', function(data) {
+  console.log("Connection established!");
+  socket.send("Hello Server!")
+  // socket.emit('clientMessage', 'b');
+  // rfidDiv1.innerHTML = "Socket Open";
+  // rfidDiv2.innerHTML = "Socket Open";
+  // rfidDiv3.innerHTML = "Socket Open";
+  // rfidDiv4.innerHTML = "Socket Open";
+  clue.innerHTML = "The hour is late and the sky is black, deep in my belly you’ll find a snack."
+  socket.emit ('clientMessage', 'b');
+  // success.innerHTML = "It is locked!";
+});
+
+socket.on('message', function(data) {
+  // console.log(data);
+  var dataArray = data.split('\r');
+  for (item of dataArray) {
+    let reg = new RegExp('RFID[\\s\\S]','m');
+    if (reg.test(item)){
+      results.push(item);
+   }
+ }
+sortInput();
+// console.log(results);
+// console.log(sortedResults);
+
+for (i=0;i<sortedResults.length;i++) {
+  if (sortedResults[i].RFIDNum == 'RFID1') {
+    if (sortedResults[i].RFIDVal == '1') {
+    img1.style.visibility = 'visible';
+    clue.innerHTML = "Tucked away I can be found, hidden in the one place devoid of sound.";
+      rfid1True = true;
+    } else {
+      rfidDiv1.innerHTML = "RFID 1 Logged Out";
+      rfid1True = false;
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID2') {
+    if (sortedResults[i].RFIDVal == '1') {
+      img2.style.visibility = 'visible';
+          clue.innerHTML = "Spirits are low, emotions are high, I’m the only private place to wash your face post-cry.";
+
+      rfid2True = true;
+    } else {
+      rfidDiv2.innerHTML = "RFID 2 Logged Out";
+      rfid2True = false;
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID3') {
+    if (sortedResults[i].RFIDVal == '1') {
+      img3.style.visibility = 'visible';
+      clue.innerHTML = "Tinker tinker tinker, I think your obsessed! But please use me before leaving to clean up your mess!";
+
+      rfid3True = true;
+    } else {
+      rfidDiv3.innerHTML = "RFID 3 Logged Out";
+      rfid3True = false;
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID4') {
+    if (sortedResults[i].RFIDVal == '1') {
+    img4.style.visibility = 'visible';
+    clue.innerHTML = "Clue 1";
+
+      rfid4True = true;
+    } else {
+      rfidDiv4.innerHTML = "RFID4 Logged Out";
+      rfid4True = false;
+  }
+ }
+}
+
+// console.log(rfid1True);
+// console.log(rfid2True);
+// console.log(rfid3True);
+console.log(rfid4True);
+console.log(successTrue);
+if (rfid1True == true && rfid2True == true && rfid3True == true && rfid4True == true) 
+{
+successTrue = true;
+}
+if (successTrue == true) {
+  button.style.visibility="visible";
+  clue.innerHTML = "Click the button to claim your prize!"
+  // success.innerHTML = "It is unlocked!";
+}
+
+});
+
+button.onclick = function(){
+console.log("button clicked");
+socket.emit('clientMessage', 'c');
+}
+
+
+ //function to create object with RFID Number and Value
+function sortInput() {
+  for (i=0;i<results.length;i++) {
+  let tempHolder = results[i].split(':');
+   sortedResults.push({ RFIDNum: tempHolder[0], RFIDVal: tempHolder[1]});
+}
+}
+
+
+
+// socket.onopen = openSocket;
+// socket.onmessage = showData;
+
+// function openSocket() {
+//  rfidDiv1.innerHTML = "Socket Open";
+//  rfidDiv2.innerHTML = "Socket Open";
+//  rfidDiv3.innerHTML = "Socket Open";
+//  rfidDiv4.innerHTML = "Socket Open";
+//  socket.send("Hello Server!");
+// }
+
+// function showData(result) {
+// //when server returns, show result in DIV
+// //get all of our serial data as an array separated by carriage return
+//   var dataArray = result.data.split('\r');
+//   for (item of dataArray) {
+//     let reg = new RegExp('RFID[\\s\\S]','m');
+//     if (reg.test(item)){
+//       results.push(item);
+//    }
+//  }
+//  sortInput();
+//  console.log(results);
+//  console.log(sortedResults);
+
+//  for (i=0;i<sortedResults.length;i++) {
+//    if (sortedResults.RFIDNum == 'RFID1') {
+//      if (sortedResults.RFIDVal == '1') {
+//        rfidDiv1.innerHTML = "RFID 1 Logged In";
+//      } else {
+//        rfidDiv1.innerHTML = "RFID 1 Logged Out";
+//      }
+//    } else if (sortedResults.RFIDNum == 'RFID2') {
+//      if (sortedResults.RFIDVal == '1') {
+//        rfidDiv2.innerHTML = "RFID 2 Logged In";
+//      } else {
+//        rfidDiv2.innerHTML = "RFID 2 Logged Out";
+//      }
+//    } else if (sortedResults.RFIDNum == 'RFID3') {
+//      if (sortedResults.RFIDVal == '1') {
+//        rfidDiv3.innerHTML = "RFID 3 Logged In";
+//      } else {
+//        rfidDiv3.innerHTML = "RFID 3 Logged Out";
+//      }
+//    } else if (sortedResults.RFIDNum == 'RFID4') {
+//      if (sortedResults.RFIDVal == '1') {
+//        rfidDiv4.innerHTML = "RFID 4 Logged In";
+//      } else (
+//        rfidDiv4.innerHTML = "RFID4 Logged Out");
+//    }
+//  }
+
+
+//  //function to create object with RFID Number and Value
+// function sortInput() {
+//   for (i=0;i<results.length;i++) {
+//   let tempHolder = results[i].split(':');
+//    sortedResults.push({ RFIDNum: tempHolder[0], RFIDVal: tempHolder[1]});
+// }
+// }
+
+// }
+
+
+
+</script> 
+
+</html>
