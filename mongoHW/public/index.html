@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MongoDB HW</title>
+<link rel=stylesheet type="text/css" href="styles/style.css">
+<script src="/socket.io/socket.io.js"></script>
+
+
+</head>
+<body>
+<p>Welcome to the Dance Party!</p>	
+
+<div id = "djInfo">
+  
+
+
+</div>
+
+<div id="per1">
+<div id="person1info"></div>
+
+<div id = "danaAudioDiv">
+<audio id ="danaSound">
+<source src="files/dana.mp3" type = "audio/mpeg" >
+</audio>
+<button id="danaAudioButton" type="button" onclick = "audioDanaPlayPause()">
+Play/Pause
+</button>
+</div>  
+
+</div>
+
+
+<div id="per2">
+<div id="person2info"></div>
+  
+<div id ="jasonAudioDiv">
+  <audio id ="jasonSound">
+<source src="files/jason.mp3" type = "audio/mpeg" >
+</audio>
+<button id="jasonAudioButton" type="button" onclick = "audioJasonPlayPause()">
+Play/Pause
+</button>
+
+</div>
+
+
+</div>
+
+
+
+<div id ="per3">
+<div id="person3info"></div>
+  
+<div id = "miyeonAudioDiv">
+  <audio id ="miyeonSound">
+<source src="files/miyeon.mp3" type = "audio/mpeg" >
+</audio>
+<button id="miyeonAudioButton" type="button" onclick = "audioMiyeonPlayPause()">
+Play/Pause
+</button>
+</div>
+
+
+
+</div>
+
+
+
+
+<div id ="per4">
+<div id="person4info"></div>
+
+<div id = "aditiAudioDiv">
+<audio id ="aditiSound">
+<source src="files/aditi.mp3" type = "audio/mpeg" >
+</audio>
+<button id="aditiAudioButton" type="button" onclick = "audioAditiPlayPause()">
+Play/Pause
+</button>
+</div>
+  
+
+</div>
+
+
+
+
+
+
+<!-- <audio id = "aditiSound">
+<source src="files/aditi.mp3" type = "audio/mpeg" >
+
+</audio>
+<audio id = "jasonSound">
+<source src="files/jason.mp3" type = "audio/mpeg" id = "jasonSound">
+</audio>
+<audio id="miyeonSound">
+<source src="files/miyeon.mp3" type = "audio/mpeg" id = "miyeonSound">
+</audio> -->
+</body>
+<script type = "text/javascript">
+
+var person1 = document.getElementById("per1");
+var person2 = document.getElementById("per2");
+var person3 = document.getElementById("per3");
+var person4 = document.getElementById("per4");
+var person1info = document.getElementById("person1info");
+var person2info = document.getElementById("person2info");
+var person3info = document.getElementById("person3info");
+var person4info = document.getElementById("person4info");
+var jasonAudioDiv = document.getElementById("jasonAudioDiv");
+var miyeonAudioDiv = document.getElementById("miyeonAudioDiv");
+var danaAudioDiv = document.getElementById("danaAudioDiv");
+var aditiAudioDiv = document.getElementById("aditiAudioDiv");
+person1.style.visibility = "hidden";
+person2.style.visibility = "hidden";
+person3.style.visibility = "hidden";
+person4.style.visibility = "hidden";
+
+// aditiAudioDiv.style.visibility = "hidden";
+// danaAudioDiv.style.visibility = "hidden";
+// jasonAudioDiv.style.visibility = "hidden";
+// miyeonAudioDiv.style.visibility = "hidden";
+
+var results = [];
+var sortedResults = [];
+var peopleData;
+
+
+//audio
+function audioDanaPlayPause() {
+var danaSound = document.getElementById("danaSound");
+
+if (danaSound.paused) {
+  danaSound.play();
+} else {
+  danaSound.pause();
+}
+
+}
+
+
+//audio
+function audioAditiPlayPause() {
+var aditiSound = document.getElementById("aditiSound");
+
+
+if (aditiSound.paused) {
+  aditiSound.play();
+} else {
+  aditiSound.pause();
+}
+
+}
+
+//audio
+function audioMiyeonPlayPause() {
+var miyeonSound = document.getElementById("miyeonSound");
+
+if (miyeonSound.paused) {
+  miyeonSound.play();
+} else {
+  miyeonSound.pause();
+}
+
+}
+
+//audio
+function audioJasonPlayPause() {
+var jasonSound = document.getElementById("jasonSound");
+
+if (jasonSound.paused) {
+  jasonSound.play();
+} else {
+  jasonSound.pause();
+}
+
+}
+
+
+//the socket
+var socket = io.connect('http://localhost:8080');
+
+//Event Listeners for the Socket
+
+ socket.on('open', function(data) {
+  console.log("Connection established!");
+  socket.send("Hello Server!")
+  // socket.emit ('recordUpdate', 'null');
+  console.log(data);
+  console.log(data.list.person1.name);
+  peopleData = data.list;
+});
+
+
+socket.on('message', function(data) {
+	console.log(data);
+  
+  var dataArray = data.split('\r');
+  for (item of dataArray) {
+    let reg = new RegExp('RFID[\\s\\S]','m');
+    if (reg.test(item)){
+      results.push(item);
+   }
+ }
+sortInput();
+// console.log(results);
+// console.log(sortedResults);
+console.log("The document is " + peopleData);
+
+for (i=0;i<sortedResults.length;i++) {
+  if (sortedResults[i].RFIDNum == 'RFID1') {
+    if (sortedResults[i].RFIDVal == '1') {
+   		
+   		djInfo.innerHTML = "<div id = 'name'>" + peopleData.person1.name + "</div>" + "<div id = 'djName'>" + peopleData.person1.djName + "</div>" +
+      "<div id = 'favGenre'>" + peopleData.person1.favGenre + "</div>" + 
+      "<div id = 'tagline'>" + peopleData.person1.tagline + "</div>" + "<div id = 'danaAudioDiv'><audio id ='danaSound'><source src='files/dana.mp3' type = 'audio/mpeg' ></audio><button id='danaAudioButton' type='button' onclick = 'audioDanaPlayPause()'>Play/Pause</button></div>"
+
+
+
+
+          socket.emit("recordUpdate", peopleData.person1.id);
+
+    } else {
+      rfidDiv1.innerHTML = "RFID 1 Logged Out";
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID2') {
+    
+
+    if (sortedResults[i].RFIDVal == '1') {
+       djInfo.innerHTML = "<div id = 'name'>" + peopleData.person2.name + "</div>" + "<div id = 'djName'>" + peopleData.person2.djName + "</div>" +
+      "<div id = 'favGenre'>" + peopleData.person2.favGenre + "</div>" + 
+      "<div id = 'tagline'>" + peopleData.person2.tagline + "</div>" +
+      "<div id = 'jasonAudioDiv'><audio id ='jasonSound'><source src='files/jason.mp3' type = 'audio/mpeg' ></audio><button id='jasonAudioButton' type='button' onclick = 'audioJasonPlayPause()'>Play/Pause</button></div>"
+
+      socket.emit("recordUpdate", peopleData.person2.id);
+
+
+    } else {
+      rfidDiv2.innerHTML = "RFID 2 Logged Out";
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID3') {
+   
+
+
+
+    if (sortedResults[i].RFIDVal == '1') {
+   	djInfo.innerHTML = "<div id = 'name'>" + peopleData.person3.name + "</div>" + "<div id = 'djName'>" + peopleData.person3.djName + "</div>" +
+      "<div id = 'favGenre'>" + peopleData.person3.favGenre + "</div>" + 
+      "<div id = 'tagline'>" + peopleData.person3.tagline + "</div>" +
+      "<div id = 'miyeonAudioDiv'><audio id ='danaSound'><source src='files/miyeon.mp3' type = 'audio/mpeg' ></audio><button id='miyeonAudioButton' type='button' onclick = 'audioMiyeonPlayPause()'>Play/Pause</button></div>"
+      socket.emit("recordUpdate", peopleData.person3.id);
+
+    } else {
+      rfidDiv3.innerHTML = "RFID 3 Logged Out";
+      rfid3True = false;
+    }
+  } else if (sortedResults[i].RFIDNum == 'RFID4') {
+    
+    if (sortedResults[i].RFIDVal == '1') {
+ djInfo.innerHTML = "<div id = 'name'>" + peopleData.person4.name + "</div>" + "<div id = 'djName'>" + peopleData.person4.djName + "</div>" +
+      "<div id = 'favGenre'>" + peopleData.person4.favGenre + "</div>" + 
+      "<div id = 'tagline'>" + peopleData.person4.tagline + "</div>" +
+      "<div id = 'aditiAudioDiv'><audio id ='aditiSound'><source src='files/aditi.mp3' type = 'audio/mpeg' ></audio><button id='aditiAudioButton' type='button' onclick = 'audioAditiPlayPause()'>Play/Pause</button></div>"
+      socket.emit("recordUpdate", peopleData.person4.id);
+
+    } else {
+      rfidDiv4.innerHTML = "RFID4 Logged Out";
+  }
+ }
+}
+});
+
+//function to create object with RFID Number and Value
+function sortInput() {
+  for (i=0;i<results.length;i++) {
+  let tempHolder = results[i].split(':');
+   sortedResults.push({ RFIDNum: tempHolder[0], RFIDVal: tempHolder[1]});
+}
+}
+
+//audio shit
+
+
+
+</script>
+
+
+</html>
