@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+  <head> 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Saved Designs</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+<body>
+<div class = 'all'>
+<div class ='title'>Saved Designs</div>
+<div class = 'content'>
+<div class = 'load' id = "currentPerson" style= "font-size:16pt">"See some cool designs!"</div>
+<div id = 'loadButton' onclick="loadDesign()">Load Design</div>
+</div>
+<div class ="nav" onclick="refresh()">Create a <a href="index.html">New Design</a></div>
+</div>
+</body>
+
+<!--Linked Scripts-->
+<script src="/socket.io/socket.io.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+
+<!--In Page Scripting -->
+<script>
+var baseURL = "http://localhost:8080";
+var person = document.getElementById("currentPerson");
+var savedItems = [];    
+
+//API Calls
+
+//Test the Connection
+function testConnection() {
+    $.ajax({
+        method: "GET",
+        url: baseURL + `/test`
+    }).done(function(res) {
+        console.log("Test result is " + res.message);
+
+    })
+}
+
+//Get Saved Designs & People from Database
+function getPeople() {
+    $.ajax({
+        method: "GET",
+        url: baseURL + `/people`
+    }).done(function(res) {
+        console.log('Got the people');
+        console.log(res);
+        for (i = 0; i < res.length; i++) {
+            console.log(res[i]);
+            savedItems.push(res[i]);
+        }
+    })
+};
+
+//Refresh the Page
+function refresh() {
+    $.ajax({
+        method: "GET",
+        url: baseURL + `/refresh`
+    }).done(function(res) {
+        console.log("Refresh is " + res.message);
+
+    })
+}
+
+//Load Next Design
+function loadDesign() {
+    refresh();
+    console.log("loadingDesign");
+    $.ajax({
+        method: "GET",
+        url: baseURL + `/loadDesign`
+    }).done(function(res) {
+        console.log(res);
+           currentPerson.innerHTML = res.name;
+    })
+}
+
+// on page load
+$(function(){
+testConnection();
+getPeople();
+  });
+  
+
+</script>
+
+
+   
